@@ -76,12 +76,15 @@ module RailsAdmin
 
     def redirect_to_on_success
       notice = t('admin.flash.successful', name: @model_config.label, action: t("admin.actions.#{@action.key}.done"))
+      if(@action.key == :new)
+        notice += "<span id=\"last_insert_id\" style=\"visibility: hidden;\" data-object_id=\"#{object.id}\">#{object.id}</span>" rescue ""
+      end
       if params[:_add_another]
-        redirect_to new_path(return_to: params[:return_to]), flash: {success: notice}
+        redirect_to new_path(return_to: params[:return_to]), flash: {success: notice.html_safe}
       elsif params[:_add_edit]
-        redirect_to edit_path(id: @object.id, return_to: params[:return_to]), flash: {success: notice}
+        redirect_to edit_path(id: @object.id, return_to: params[:return_to]), flash: {success: notice.html_safe}
       else
-        redirect_to back_or_index, flash: {success: notice}
+        redirect_to back_or_index, flash: {success: notice.html_safe}
       end
     end
 

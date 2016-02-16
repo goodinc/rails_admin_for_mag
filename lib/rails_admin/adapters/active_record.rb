@@ -142,6 +142,14 @@ module RailsAdmin
         StatementBuilder.new(column, type, value, operator).to_statement
       end
 
+      def serialized?
+        if Rails.version < '4.2'
+          model.seralized_attributes[property.name.to_s]
+        else
+          model.type_for_attribute(property.name).class == ::ActiveRecord::Type::Serialized
+        end
+      end
+
       def type_lookup(property)
         if serialized?
           {type: :serialized}
@@ -176,7 +184,6 @@ module RailsAdmin
         end
 
       private
-
         def model_lookup
           if options[:polymorphic]
             polymorphic_parents(:active_record, model_name.to_s, name) || []
@@ -238,14 +245,6 @@ module RailsAdmin
         end
 
       private
-        def serialized?
-          if Rails.versio < '4.2'
-            model.seralized_attributes[property.name.to_s]
-          else
-            model.type_for_attribute(property.name).class == ::ActiveRecord::Type::Serialized
-          end
-        end
-
         def range_filter(min, max)
           if min && max
             ["(#{@column} BETWEEN ? AND ?)", min, max]

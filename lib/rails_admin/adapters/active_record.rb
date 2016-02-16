@@ -59,13 +59,14 @@ module RailsAdmin
             DISABLED_COLUMN_TYPES.include?(c.type.to_sym) ||
             DISABLED_COLUMN_MATCHERS.any? { |matcher| matcher.match(c.type.to_s) }
         end
+        primary_key = model.primary_key.to_sym
         columns.collect do |property|
           {
             :name => property.name.to_sym,
             :pretty_name => property.name.to_s.tr('_', ' ').capitalize,
             :length => property.limit,
             :nullable? => property.null,
-            :serial? => property.primary,
+            :serial? => primary_key == property.name.to_sym,
           }.merge(type_lookup(property))
         end
       end

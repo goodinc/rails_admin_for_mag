@@ -143,11 +143,11 @@ module RailsAdmin
       end
 
       def type_lookup(property)
-        #if model.serialized_attributes[property.name.to_s]
-          #{type: :serialized}
-        #else
+        if serialized?
+          {type: :serialized}
+        else
           {type: property.type}
-        #end
+        end
       end
 
       class Association
@@ -238,6 +238,13 @@ module RailsAdmin
         end
 
       private
+        def serialized?
+          if Rails.versio < '4.2'
+            model.seralized_attributes[property.name.to_s]
+          else
+            model.type_for_attribute(property.name).class == ::ActiveRecord::Type::Serialized
+          end
+        end
 
         def range_filter(min, max)
           if min && max

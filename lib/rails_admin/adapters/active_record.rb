@@ -142,7 +142,7 @@ module RailsAdmin
         StatementBuilder.new(column, type, value, operator).to_statement
       end
 
-      def serialized?
+      def serialized?(property)
         if Rails.version < '4.2'
           model.seralized_attributes[property.name.to_s]
         else
@@ -151,7 +151,7 @@ module RailsAdmin
       end
 
       def type_lookup(property)
-        if serialized?
+        if serialized?(property)
           {type: :serialized}
         else
           {type: property.type}

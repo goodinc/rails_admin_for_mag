@@ -143,11 +143,11 @@ module RailsAdmin
       end
 
       def type_lookup(property)
-        if model.serialized_attributes[property.name.to_s]
-          {type: :serialized}
-        else
+        #if model.serialized_attributes[property.name.to_s]
+          #{type: :serialized}
+        #else
           {type: property.type}
-        end
+        #end
       end
 
       class Association

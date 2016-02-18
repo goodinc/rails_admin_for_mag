@@ -302,7 +302,8 @@ module RailsAdmin
         end
 
         def ar_adapter
-          Rails.configuration.database_configuration[Rails.env]['adapter']
+          # Rails.configuration.database_configuration[Rails.env]['adapter']
+          ::ActiveRecord::Base.connection.adapter_name.downcase
         end
 
         def like_operator
